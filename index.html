@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flori — Digital Language of Flowers</title>
+<style>
+:root{
+ --vanilla:#FFF7E6;--blush:#F7C8D3;--rosewood:#B46A72;--sage:#A8B58A;
+ --sky:#A9B7C6;--midnight:#2D3A47;--cream:#fffdf8;--ink:#384651;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--vanilla);color:var(--midnight);font-family:Arial,sans-serif}
+h1,h2,h3{font-family:Georgia,serif;font-weight:500}
+button,input{font:inherit}button{cursor:pointer}
+nav{position:absolute;top:0;left:0;width:100%;padding:22px 6%;display:flex;justify-content:space-between;z-index:10}
+.logo{font:600 30px Georgia}.logo span{color:var(--rosewood)}
+nav a{color:var(--midnight);text-decoration:none;margin-left:25px;font-size:14px;font-weight:bold}
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;padding:110px 20px 80px;position:relative;overflow:hidden}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(75px)}
+.hero:before{width:560px;height:560px;background:var(--blush);opacity:.4;top:-240px;left:-180px}
+.hero:after{width:520px;height:520px;background:var(--sage);opacity:.3;right:-190px;bottom:-220px}
+.hero-content{max-width:850px;position:relative;z-index:1}.eyebrow{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--rosewood);font-weight:bold}
+.hero h1{font-size:clamp(58px,9vw,110px);line-height:.88;margin:25px 0}.hero h1 em{color:var(--rosewood)}
+.hero p{max-width:650px;margin:auto;line-height:1.8;color:#596771;font-size:17px}
+.buttons{margin-top:35px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{border:0;border-radius:50px;padding:15px 26px;font-weight:bold}.primary{background:var(--midnight);color:white}.secondary{background:white;color:var(--midnight)}
+.section{padding:105px 6%}.heading{text-align:center;max-width:760px;margin:0 auto 50px}
+.heading span{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--rosewood);font-weight:bold}
+.heading h2{font-size:clamp(42px,6vw,68px);margin:12px 0}.heading p{line-height:1.8;color:#66737c}
+.grid{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.flower{background:rgba(255,255,255,.68);border:1px solid #2d3a4715;border-radius:28px;padding:24px 15px;text-align:center;transition:.3s;position:relative}
+.flower:hover,.flower.selected{transform:translateY(-6px);background:white;box-shadow:0 18px 50px #2d3a4715}
+.flower.selected{border:2px solid var(--rosewood)}
+.flower-art{height:125px;display:grid;place-items:center;margin-bottom:4px}
+.flower-art svg{width:108px;height:108px;overflow:visible;filter:drop-shadow(0 8px 8px #2d3a4718);transition:.35s}
+.flower:hover .flower-art svg{transform:scale(1.08) rotate(-2deg)}
+.flower h3{font-size:25px;margin:8px 0 4px}.flower p{font-size:12px;color:#78838a;min-height:31px}
+.meaning{border:0;background:var(--blush);border-radius:30px;padding:9px 15px;font-size:12px;font-weight:bold}
+.select-note{text-align:center;margin-top:25px;color:#6f7a81;font-size:13px}
+
+.creator{background:var(--midnight);color:white;padding:105px 6%;border-radius:55px 55px 0 0}
+.creator .heading p{color:white;opacity:.65}.creator .heading span{color:var(--blush)}
+.creator-wrap{max-width:1120px;margin:auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:30px}
+.panel{background:#ffffff10;border:1px solid #ffffff18;border-radius:28px;padding:30px}
+.panel h2{margin-top:0}.panel label{display:block;font-size:12px;opacity:.7;margin:18px 0 8px}
+input{width:100%;padding:15px;border-radius:14px;border:1px solid #ffffff22;background:#ffffff0e;color:white;outline:none}
+input::placeholder{color:#ffffff70}.counter{margin-top:20px}.tags{min-height:45px;display:flex;gap:8px;flex-wrap:wrap;margin:13px 0 20px}
+.tag{background:var(--blush);color:var(--midnight);padding:7px 12px;border-radius:20px;font-size:12px;font-weight:bold}
+.generate{width:100%;border:0;border-radius:50px;padding:16px;background:var(--blush);color:var(--midnight);font-weight:bold}
+.bouquet-card{background:var(--vanilla);color:var(--midnight);border-radius:28px;padding:25px;min-height:450px;position:relative;overflow:hidden}
+.small{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rosewood);font-weight:bold}
+.bouquet{height:220px;position:relative;display:flex;align-items:flex-end;justify-content:center;margin-top:8px}
+.bouquet svg{position:relative;width:115px;height:145px;margin-left:-24px;transform-origin:bottom center;filter:drop-shadow(0 8px 7px #2d3a4720)}
+.bouquet svg:nth-child(odd){transform:rotate(-8deg) translateY(6px)}.bouquet svg:nth-child(even){transform:rotate(7deg)}
+.bouquet:after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:185px;height:28px;background:linear-gradient(100deg,#a8b58a,#74865c);clip-path:polygon(50% 0,100% 35%,88% 100%,12% 100%,0 35%);opacity:.95}
+.bouquet-card h3{font-size:38px;margin:4px 0}.message{font:22px/1.45 Georgia;margin:12px 0;color:#44525c}
+.meaning-list{font-size:12px;color:#6d787f;line-height:1.6}
+
+.qr{padding:90px 6%;background:var(--sage);text-align:center}.qr h2{font-size:58px;margin:0 0 15px}
+.qr p{max-width:650px;margin:auto;line-height:1.7;color:#3f4b43}
+.qrbox{background:white;width:240px;height:240px;margin:25px auto;border-radius:25px;display:grid;place-items:center;padding:15px}
+.qrbox img{width:205px;height:205px;image-rendering:auto}
+</style>
+</head>
+<body>
+
+<nav><div class="logo">flori<span>✿</span></div><div class="links">
+<a href="#flowers">Flowers</a><a href="#create">Create a Bouquet</a>
+</div></nav>
+
+<section class="hero"><div class="hero-content">
+<div class="eyebrow">The Digital Language of Flowers</div>
+<h1>Every flower<br>tells a <em>story.</em></h1>
+<p>Explore a garden of symbolic flowers, discover their deeper meanings, then arrange the flowers you choose into a beautiful digital bouquet with a message written especially for its recipient.</p>
+<div class="buttons"><a href="#flowers"><button class="btn primary">Explore the Garden</button></a><a href="#create"><button class="btn secondary">Create a Bouquet</button></a></div>
+</div></section>
+
+<section class="section" id="flowers">
+<div class="heading"><span>Flower Library</span><h2>Choose the flowers that speak to you.</h2>
+<p>Click the flower itself to add or remove it from your bouquet. Open its meaning to discover the story, symbolism and feeling behind it.</p></div>
+<div class="grid" id="grid"></div>
+<div class="select-note">You can choose up to six flowers. Your selections will become your bouquet.</div>
+</section>
+
+<section class="creator" id="create">
+<div class="heading"><span>Create Something Personal</span><h2>Build a bouquet. Send a feeling.</h2>
+<p>Your bouquet is made from exactly the flowers you choose. The message changes with every combination.</p></div>
+<div class="creator-wrap">
+<div class="panel">
+<h2>Your bouquet</h2>
+<label for="name">Recipient's name</label><input id="name" placeholder="Enter a friend's name...">
+<div class="counter">Selected flowers: <b id="count">0</b> / 6</div>
+<div class="tags" id="tags"><span style="opacity:.5;font-size:13px">Select flowers above...</span></div>
+<button class="generate" onclick="generate()">Create My Flower Message ✦</button>
+</div>
+<div class="bouquet-card">
+<div class="small">A bouquet made just for you</div>
+<div class="bouquet" id="bouquet"></div>
+<h3 id="cardName">Someone Special</h3>
+<div class="message" id="message">Choose your flowers and your bouquet will bloom here.</div>
+<div class="meaning-list" id="meaningList"></div>
+</div>
+</div>
+</section>
+<div class="modal" id="modal"><div class="modalbox">
+<button class="close" onclick="closeModal()">×</button><div class="modal-art" id="mi"></div>
+<h2 id="mt"></h2><div class="modalmeaning" id="mm"></div><p id="md"></p>
+</div></div>
+
+<footer>Made with flowers, stories & a little bit of magic.<br><br><span>flori ✿</span> — The Digital Language of Flowers<br><br><strong>Made by Khadija</strong></footer>
+
+<script>
+const flowers=[
+{name:"Lavender",meaning:"Calm, devotion & quiet strength",desc:"Lavender has long been associated with calm, grace and devotion. It suggests a person who brings peace into a room, values sincerity and offers comfort without needing to be loud. In a bouquet, lavender can express a wish for peaceful days, gentle confidence and a bond that feels safe and enduring.",petal:"#8f78b8",center:"#f3d87a"},
+{name:"Tulip",meaning:"Perfect love, elegance & honest affection",desc:"Tulips are a beautiful symbol of sincere affection and elegant love. They carry a feeling that is warm but uncomplicated: a way of saying that someone is admired exactly as they are. Tulips also suggest fresh beginnings, confidence and the happiness of expressing what is in your heart.",petal:"#e78b9f",center:"#f3d16b"},
+{name:"Jasmine",meaning:"Sweetness, grace & warm affection",desc:"Jasmine is associated with sweetness, tenderness and an inviting spirit. Its delicate presence can symbolize someone whose kindness is felt even in small gestures. Choosing jasmine can be a gentle way of saying that a person's warmth, grace and presence make ordinary moments feel brighter.",petal:"#fffdf5",center:"#e8c45b"},
+{name:"Sunflower",meaning:"Joy, optimism & positive energy",desc:"The sunflower carries one of the brightest messages in the language of flowers. It represents optimism, warmth, loyalty and the ability to turn toward light even after difficult days. Giving a sunflower can say: keep shining, keep growing, and never underestimate the happiness your presence brings to others.",petal:"#f5c84b",center:"#754a28"},
+{name:"Lily",meaning:"Purity, renewal & a hopeful beginning",desc:"Lilies traditionally symbolize purity, renewal and hope. Their open form suggests a heart that is ready to grow, forgive and begin again. In a personal bouquet, a lily can express admiration for someone's inner clarity and a wish that the next chapter of their life brings peace and beautiful new possibilities.",petal:"#fffdf6",center:"#dcae45"},
+{name:"Rose",meaning:"Love, appreciation & deep admiration",desc:"The rose is one of the most enduring symbols of affection. Beyond romance, it can express gratitude, admiration, tenderness and the simple message that someone matters. A rose in your bouquet adds emotional depth: a reminder that beautiful connections are worth noticing, celebrating and caring for.",petal:"#c96579",center:"#e6b54d"},
+{name:"Violet",meaning:"Loyalty, modesty & heartfelt sincerity",desc:"Violets are connected with loyalty, modesty and quiet affection. They represent feelings that do not need to announce themselves to be real. Choosing violet can symbolize a dependable friend, a thoughtful personality or a connection built on trust, sincerity and the small acts of kindness people remember.",petal:"#7665a9",center:"#e6c65a"},
+{name:"Anemone",meaning:"Hope, anticipation & emotional courage",desc:"Anemones carry a sense of anticipation and hope. They can represent the courage to look forward even when the future is uncertain. In a bouquet, anemones add a message of emotional bravery: stay curious, protect your hopes and allow yourself to believe that something beautiful may still be unfolding.",petal:"#d96f91",center:"#403f52"},
+{name:"Daisy",meaning:"Innocence, friendship & simple happiness",desc:"The daisy represents uncomplicated happiness, openness and friendship. It brings a playful, honest energy to a bouquet and can remind someone that joy does not always have to be grand. Sometimes it is found in laughter, familiar conversations, sunny afternoons and the people who make you feel completely yourself.",petal:"#fffdf4",center:"#e3b83f"},
+{name:"Peony",meaning:"Prosperity, romance & generous-hearted joy",desc:"Peonies are often associated with prosperity, good fortune, romance and abundance. Their layered petals suggest a personality with many beautiful sides waiting to be discovered. A peony can be a wish for a life filled with meaningful relationships, creative growth, generous moments and reasons to celebrate.",petal:"#ef9db0",center:"#e7bd55"},
+{name:"Iris",meaning:"Wisdom, creativity & courageous imagination",desc:"The iris represents wisdom, imagination and creative expression. It suits someone who sees possibilities where others see ordinary things. Including an iris can communicate admiration for a curious mind, an independent spirit and the courage to turn ideas into something personal and beautiful.",petal:"#6967a8",center:"#e5bd4d"},
+{name:"Gardenia",meaning:"Secret love, elegance & sincere admiration",desc:"Gardenia has a classic association with secret affection and refined beauty. It can express admiration that is sincere, gentle and perhaps not yet spoken aloud. In a digital bouquet, gardenia creates an intimate feeling: a quiet reminder that some of the most meaningful feelings begin as a small secret held close.",petal:"#fffdf7",center:"#e4bd55"},
+{name:"Lily of the Valley",meaning:"Happiness, tenderness & return of brighter days",desc:"Lily of the valley is often connected with happiness, tenderness and renewal. Its small bell-shaped blooms carry a quiet sense of hope and the feeling that brighter days can return. It is a lovely choice for someone beginning a new chapter or simply deserving a gentle reminder to keep going.",petal:"#fffef9",center:"#d8b950"},
+{name:"Cherry Blossom",meaning:"New beginnings, beauty & fleeting moments",desc:"Cherry blossoms symbolize renewal and the delicate beauty of moments that do not last forever. They encourage us to notice what is beautiful while it is here. Choosing cherry blossom can express a wish to welcome change, appreciate the present and step into a new chapter with an open heart.",petal:"#f5aabd",center:"#e7b84d"}
+];
+
+function flowerSVG(f){
+return `<svg viewBox="0 0 120 120" aria-hidden="true">
+<path d="M58 65 C56 83 52 98 48 112" stroke="#70855d" stroke-width="5" fill="none" stroke-linecap="round"/>
+<path d="M53 92 C37 84 29 89 25 96 C39 100 47 99 53 94Z" fill="#91a36f"/>
+<path d="M52 82 C69 72 79 76 84 84 C70 89 61 89 52 85Z" fill="#a8b58a"/>
+${[0,60,120,180,240,300].map(a=>`<ellipse cx="60" cy="38" rx="18" ry="32" fill="${f.petal}" transform="rotate(${a} 60 60)"/>`).join("")}
+<circle cx="60" cy="60" r="13" fill="${f.center}"/>
+<circle cx="55" cy="55" r="2.8" fill="#fff8e6"/><circle cx="65" cy="58" r="2.5" fill="#fff8e6"/>
+</svg>`;
+}
+function renderFlowers(){
+const grid=document.getElementById("grid");
+flowers.forEach((f,i)=>{
+const d=document.createElement("div");d.className="flower";d.id="flower-"+i;
+d.innerHTML=`<div class="flower-art">${flowerSVG(f)}</div><h3>${f.name}</h3><p>${f.meaning}</p><button class="meaning">Read the full meaning</button>`;
+d.querySelector(".meaning").onclick=e=>{e.stopPropagation();show(i)};
+d.onclick=()=>toggle(i,d);grid.appendChild(d);
+});}
+renderFlowers();
+
+let selected=[];
+function show(i){const f=flowers[i];document.getElementById("mi").innerHTML=flowerSVG(f);document.getElementById("mt").textContent=f.name;document.getElementById("mm").textContent=f.meaning;document.getElementById("md").textContent=f.desc;document.getElementById("modal").classList.add("open")}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+document.getElementById("modal").onclick=e=>{if(e.target===document.getElementById("modal"))closeModal()}
+
+function toggle(i,d){
+const x=selected.indexOf(i);
+if(x>-1){selected.splice(x,1);d.classList.remove("selected")}
+else{if(selected.length===6){alert("Your bouquet can contain up to six different flowers.");return}selected.push(i);d.classList.add("selected")}
+updateCreator();
+}
+function updateCreator(){
+document.getElementById("count").textContent=selected.length;document.getElementById("tags").innerHTML="";
+if(!selected.length){document.getElementById("tags").innerHTML='<span style="opacity:.5;font-size:13px">Select flowers above...</span>';return}
+selected.forEach(i=>{const t=document.createElement("span");t.className="tag";t.textContent=flowers[i].name;document.getElementById("tags").appendChild(t)})
+renderBouquet();
+}
+function renderBouquet(){
+document.getElementById("bouquet").innerHTML="";
+selected.forEach(i=>{const holder=document.createElement("div");holder.innerHTML=flowerSVG(flowers[i]);document.getElementById("bouquet").appendChild(holder.firstElementChild)})
+}
+function generate(){
+if(!selected.length){alert("Please choose at least one flower.");return}
+const n=document.getElementById("name").value.trim()||"Someone Special";
+const fs=selected.map(i=>flowers[i]);
+document.getElementById("cardName").textContent=n;
+const traits=fs.map(f=>f.meaning.split(" & ")[0]).join(", ");
+const finalTrait=fs.length>1?traits.replace(/, ([^,]+)$/," and $1"):traits;
+document.getElementById("message").textContent=`Dear ${n}, this bouquet was created from flowers that speak of ${finalTrait}. Together they carry a message of warmth, hope and appreciation — a reminder that your presence leaves something beautiful wherever you go. May you keep growing, keep shining, and always remember how many small reasons there are to celebrate you.`;
+document.getElementById("meaningList").innerHTML="<b>What your bouquet carries:</b><br>"+fs.map(f=>"• "+f.name+" — "+f.meaning).join("<br>");
+document.getElementById("create").scrollIntoView({behavior:"smooth"});
+}
+
+</script>
+</body>
+</html>
